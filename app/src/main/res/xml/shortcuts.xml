@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Long-press the Sidedoor icon: straight to Chats or Saved without opening the app first. -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutId="chats"
+        android:shortcutShortLabel="@string/shortcut_chats">
+        <intent
+            android:action="com.sidedoor.app.action.OPEN_CHATS"
+            android:targetClass="com.sidedoor.app.ui.MainActivity"
+            android:targetPackage="com.sidedoor.app" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutId="saved"
+        android:shortcutShortLabel="@string/shortcut_saved">
+        <intent
+            android:action="com.sidedoor.app.action.OPEN_SAVED"
+            android:targetClass="com.sidedoor.app.ui.MainActivity"
+            android:targetPackage="com.sidedoor.app" />
+    </shortcut>
+</shortcuts>

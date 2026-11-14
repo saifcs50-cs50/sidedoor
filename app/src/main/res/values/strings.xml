@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Sidedoor</string>
+    <string name="guard_label">Sidedoor guard</string>
+    <string name="guard_summary">Keeps Instagram to your chats, reels friends send, and your Saved.</string>
+    <string name="guard_description">Sidedoor watches Instagram, and only Instagram, so it can close the feed, the Reels tab and Explore before they draw you in. Chats, reels your friends send and your Saved stay open.\n\nIt stores nothing it sees off your phone. Sidedoor has no internet permission at all.</string>
+    <string name="shortcut_chats">Chats</string>
+    <string name="shortcut_saved">Saved</string>
+    <string name="listener_label">Sidedoor reels from friends</string>
+    <string name="shield_opening_saved">Opening Saved…</string>
+    <string name="shield_opening_chat">Opening %1$s…</string>
+    <string name="alert_channel">Guard alerts</string>
+    <string name="alert_ig_changed_title">Instagram changed</string>
+    <string name="alert_ig_changed_body">Sidedoor did not recognise Instagram %1$s\'s inbox. The guard may be misreading screens until its rules are updated.</string>
+</resources>

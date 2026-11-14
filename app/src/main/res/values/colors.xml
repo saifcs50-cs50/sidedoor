@@ -1,0 +1,7 @@
+<resources>
+    <color name="door_background">#FFF7F4EF</color>
+    <color name="door_accent">#FFE2553F</color>
+    <!-- Instagram's tab bar, so a covered tab reads as an empty slot. -->
+    <color name="ig_tab_bar">#FFFFFFFF</color>
+    <color name="shield">#FF0C1014</color>
+</resources>

@@ -1,0 +1,30 @@
+*.iml
+.gradle/
+.kotlin/
+.idea/
+.DS_Store
+build/
+captures/
+.externalNativeBuild
+.cxx
+dist/
+target/
+node_modules/
+__pycache__/
+release/
+
+# Local config and signing material
+local.properties
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+key.properties
+keystore.properties
+google-services.json
+
+# Build output and logs
+*.apk
+*.aab
+*.log

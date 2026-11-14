@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A door standing ajar: the frame, and a panel swung open to the right. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="4"
+        android:strokeLineJoin="round"
+        android:pathData="M38,76 L38,32 L70,32 L70,76" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M38,32 L58,38 L58,82 L38,76 Z" />
+    <path
+        android:fillColor="#FFE2553F"
+        android:pathData="M52,58 m-2.5,0 a2.5,2.5 0 1,0 5,0 a2.5,2.5 0 1,0 -5,0" />
+</vector>
