@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity(), FrontDoorActions {
         )
     }
 
-    // ---------------------------------------------------------------- doors
+    // doors
 
     override fun openChats() {
         graph.bus.requestCanary(SystemClock.elapsedRealtime())
@@ -134,7 +134,7 @@ class MainActivity : ComponentActivity(), FrontDoorActions {
         false
     }
 
-    // ---------------------------------------------------------------- setup
+    // setup
 
     private companion object {
         const val ACTION_OPEN_CHATS = "com.sidedoor.app.action.OPEN_CHATS"

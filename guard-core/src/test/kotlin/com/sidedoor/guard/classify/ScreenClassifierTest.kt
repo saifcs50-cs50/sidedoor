@@ -11,7 +11,7 @@ class ScreenClassifierTest {
 
     private fun classify(s: ScreenSnapshot) = ScreenClassifier.classify(s)
 
-    // --- real dumps from the test phone (Instagram 448.0.0.52.84) -----------------
+    // real dumps from the test phone (Instagram 448.0.0.52.84)
 
     @Test
     fun `home feed dump is the home feed`() {
@@ -48,7 +48,7 @@ class ScreenClassifierTest {
         assertThat(classify(Fixtures.load("friend_reel_comments.xml"))).isEqualTo(Screen.FRIEND_REEL)
     }
 
-    // --- video screens, from dumpsys IDs ------------------------------------
+    // video screens, from dumpsys IDs
 
     @Test
     fun `reel with a reply bar is a friend reel`() {
@@ -107,7 +107,7 @@ class ScreenClassifierTest {
         assertThat(classify(IgScreens.postsFeed())).isEqualTo(Screen.POSTS_LIST)
     }
 
-    // --- tab bar ------------------------------------------------------------
+    // tab bar
 
     @Test
     fun `each selected tab maps to its screen`() {
@@ -132,7 +132,7 @@ class ScreenClassifierTest {
         assertThat(classify(s)).isEqualTo(Screen.OTHER_PROFILE)
     }
 
-    // --- default deny for media ---------------------------------------------
+    // default deny for media
 
     @Test
     fun `an unrecognised screen that plays media is unknown media`() {

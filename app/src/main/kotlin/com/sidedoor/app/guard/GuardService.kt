@@ -87,7 +87,7 @@ class GuardService : AccessibilityService() {
         }
     }
 
-    // ------------------------------------------------------------ lifecycle
+    // lifecycle
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -127,7 +127,7 @@ class GuardService : AccessibilityService() {
         Log.i(TAG, "Guard stopped")
     }
 
-    // --------------------------------------------------------------- events
+    // events
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         // During a session the home screens are watched too, only so their
@@ -171,7 +171,7 @@ class GuardService : AccessibilityService() {
         handler.postAtTime(evaluateRunnable, due)
     }
 
-    // ------------------------------------------------------------- evaluate
+    // evaluate
 
     private fun evaluate() {
         val now = SystemClock.elapsedRealtime()
@@ -283,7 +283,7 @@ class GuardService : AccessibilityService() {
             .onFailure { Log.e(TAG, "Could not open the inbox link", it) }
     }
 
-    // -------------------------------------------------------------- session
+    // session
 
     /**
      * Whether this visit is guarded. A live session carries on unless the
@@ -331,7 +331,7 @@ class GuardService : AccessibilityService() {
         graph.stats.flush()
     }
 
-    // ---------------------------------------------------------------- trips
+    // trips
 
     /** A walk to Saved or to one chat. [progressAt] moves every time it reaches a new screen. */
     private data class Trip(
@@ -391,7 +391,7 @@ class GuardService : AccessibilityService() {
             is TripGoal.Chat -> "Chat"
         }
 
-    // --------------------------------------------------------------- canary
+    // canary
 
     private fun settleCanary(result: CanaryResult) {
         if (result == CanaryResult.Pending) return
@@ -404,7 +404,7 @@ class GuardService : AccessibilityService() {
         graph.bus.reportCanary(if (result == CanaryResult.Failed) version else null)
     }
 
-    // -------------------------------------------------------------- presence
+    // presence
 
     /**
      * Overlays must never outlive Instagram being in front: a dead zone left
