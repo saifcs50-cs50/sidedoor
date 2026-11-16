@@ -1,31 +1,18 @@
 # Sidedoor
 
-Instagram through the side door: your chats, the reels friends send you, and
-your Saved. No Home feed, no Reels tab, no Explore, no stories.
+I wanted Instagram only for my chats, the reels friends send me and my Saved, so I built Sidedoor. It's a small
+Android app that keeps Instagram's Home feed, Reels tab, Explore and stories closed.
 
-Sidedoor is a small Android app for people who want Instagram's messaging
-without its feed. It works only when you go in through Sidedoor. Open Instagram
-from its own icon or from a notification and it is the normal app, untouched:
-the guard does not read the screen at all.
+Sidedoor is an accessibility service that watches the real Instagram app, recognises each screen and closes any
+screen that isn't on an allowlist. It doesn't modify Instagram or touch its network traffic, so messaging keeps full
+native quality: notifications, voice notes, calls and reactions. When you open Instagram from its own icon or from a
+notification, it's the normal app and the guard doesn't read the screen at all.
 
-Sidedoor does not modify Instagram and does not touch its network traffic. It
-is an Android accessibility service that watches the real Instagram app,
-recognises each screen, and closes every one that is not on an allowlist.
-Messaging keeps full native quality: notifications, voice notes, calls,
-reactions.
+It needs Android 8.0 (API 26) or newer. Sidedoor is not affiliated with Instagram or Meta. "Instagram" is a trademark
+of its owner. This is an independent personal project that works alongside the official app and is not endorsed by,
+or connected to, Meta.
 
-> **Not affiliated with Instagram or Meta.** "Instagram" is a trademark of its
-> owner. This is an independent personal project that works alongside the
-> official app and is not endorsed by, or connected to, Meta.
-
-> **Fragile by design.** The guard recognises screens by Instagram's internal
-> view IDs, which Instagram can rename in any update. The rules here were
-> recorded against Instagram 448.0.0.52.84 on a single phone. After an
-> Instagram update the guard may miss things until the rules are updated.
-> Sidedoor has a canary that tells you when the inbox stops being recognised,
-> but treat it as a helper for your own willpower, not a security boundary.
-
-## What it does
+## What the guard does
 
 | | |
 |---|---|
@@ -39,13 +26,25 @@ reactions.
 | **Reels from friends** | Unread reels friends sent line up in a finite list on the Sidedoor screen, read from your inbox each time you open Chats (and from DM notifications, where Instagram's are on). Tapping one opens that chat. |
 | **Canary** | Every Chats tap checks that the guard still recognises the inbox; a failure means Instagram changed and you get told. |
 
-Instagram's own notifications are left exactly as they are. The Saved button,
-story covering and the reels list read English labels; the rest of the guard
-works in any language.
+## Telling a saved reel apart
+
+Saved reels and Instagram's own picks play in the same full-screen viewer, and the guard tells them apart by the
+bookmark button. My first version read its label, which blocked my own saved reels: that viewer keeps the label
+"Save" on a saved reel, and only post lists change it to "Remove from saved". The button is marked as selected,
+though, so the guard now accepts either signal.
+
+## Limits
+
+- The guard recognises screens by Instagram's internal view IDs, which Instagram can rename in any update. I
+  recorded the rules against Instagram 448.0.0.52.84 on a single phone, so after an update the guard may miss things
+  until the rules are updated.
+- Treat it as a helper for your own willpower. It is not a security boundary.
+- The Saved button, story covering and the reels list read English labels. The rest of the guard works in any
+  language.
 
 ## Permissions and why
 
-Sidedoor asks for the following, and nothing else:
+Sidedoor asks for these and nothing else:
 
 | Permission or access | Why |
 |---|---|
@@ -54,53 +53,44 @@ Sidedoor asks for the following, and nothing else:
 | **Post notifications** (`POST_NOTIFICATIONS`) | Sidedoor's single alert: Instagram changed and the guard may be misreading screens. |
 | **Package visibility** (`<queries>`) | To launch Instagram, read its version for the canary, and find the home-screen apps that end a session. There is no broad "query all packages" permission. |
 
-**No `INTERNET` permission.** Whatever Sidedoor reads cannot leave the phone.
-This is not just a promise: every build runs
-`:app:verify<Variant>NoNetworkPermissions`, which fails if a network,
-Wi-Fi-state or query-all-packages permission reaches the merged manifest (a
-transitive dependency can add one without any source file changing).
+There is no `INTERNET` permission, so nothing Sidedoor reads can leave the phone. Every build runs
+`:app:verify<Variant>NoNetworkPermissions`, which fails if a network, Wi-Fi-state or query-all-packages permission
+reaches the merged manifest, because a transitive dependency can add one without any source file changing.
 
-What it stores, on the phone only: the list of waiting reels (sender name and
-message preview, from your inbox and notifications) and per-day counters for
+It stores, on the phone only, the list of waiting reels (sender name and message preview) and per-day counters for
 the "This week" card. Backups are switched off (`allowBackup="false"`).
 
-Debug builds can additionally write the current Instagram screen, including any
-text on it, to the app's private files folder (a broadcast, or automatically
-when a block happens), so that a false positive can become a test fixture.
-Release builds do not. If you contribute a fixture, scrub personal text first:
-the fixtures in this repo have every name, message and caption replaced with
-`redacted`.
+Debug builds can also dump the current Instagram screen, including any text on it, to the app's private files folder (on a
+broadcast, or automatically when a block happens) so a false positive can become a test fixture. Release builds
+don't. Scrub personal text from any fixture you contribute: the ones in this repo have every name, message and
+caption replaced with `redacted`.
 
 ## Build
 
-You need a JDK 17 or newer and the Android SDK (platform 37 and build tools),
-with `ANDROID_HOME` set or an SDK path in `local.properties`
-(`sdk.dir=/path/to/sdk`; this file is git-ignored). The Gradle wrapper
-downloads Gradle itself.
+You need JDK 17 or newer and the Android SDK (platform 37 and build tools), with `ANDROID_HOME` set or
+`sdk.dir=/path/to/sdk` in a git-ignored `local.properties`. The Gradle wrapper downloads Gradle itself.
 
 ```bash
 ./gradlew test                 # JVM unit tests (no device needed)
 ./gradlew :app:assembleDebug   # debug APK in app/build/outputs/apk/debug/
 ```
 
-The versions of the Android Gradle Plugin, Gradle, Kotlin and the Compose BOM
-are pinned together in `gradle/libs.versions.toml`; bump them as a set.
+The versions of the Android Gradle Plugin, Gradle, Kotlin and the Compose BOM are pinned together in
+`gradle/libs.versions.toml`, so bump them as a set.
 
 ### Signing
 
-Both build types use a signing key if you provide one, so that a debug build
-can replace a release build on the same phone without uninstalling. Put these
-in your user-level `~/.gradle/gradle.properties` (never in the repo):
+Both build types use your signing key if you set one, so a debug build can replace a release build on the same
+phone without uninstalling. Put these in your user-level `~/.gradle/gradle.properties`, never in the repo:
 
 ```properties
 sidedoor.keystore=/path/to/your-keystore.jks
 sidedoor.keystore.password=your-password
 ```
 
-The key alias must be `sidedoor`. Without them the debug build uses Android's
-default debug key and the release build comes out **unsigned** (it will not
-install until you sign it). Keep a backup of any key you use: every copy
-already installed can only be updated by an APK signed with the same key.
+The key alias must be `sidedoor`. Without a key, the debug build uses Android's default debug key and the release
+build comes out unsigned, so it won't install until you sign it. Back up any key you use: an installed copy can only
+be updated by an APK signed with the same key.
 
 ### Install over adb
 
@@ -109,42 +99,32 @@ tools/install.sh [adb-serial] [debug|release]   # build, install, switch on guar
 tools/device-check.sh [adb-serial]              # on-device regression check
 ```
 
-`install.sh` grants the notification and listener permissions and enables the
-accessibility service through `adb`, so there is no tapping through Settings.
-You can also enable everything by hand from the Sidedoor screen, which links to
-each setting. `device-check.sh` is meant to be run after every Instagram
-update; it only launches Instagram, taps the covered tabs, swipes between tabs
-and reads Sidedoor's own log lines. It never opens a chat, taps a story, or
-likes or follows anything.
+`install.sh` grants the notification and listener permissions and turns on the accessibility service over `adb`.
+You can also do it by hand from the Sidedoor screen, which links to each setting. Run `device-check.sh` after every
+Instagram update. It only launches Instagram, taps the covered tabs, swipes between tabs and reads Sidedoor's own log
+lines, and it never opens a chat, taps a story, or likes or follows anything.
 
-Use Sidedoor's icon when you want the side door and Instagram's own icon when
-you want the normal app. Long-press the Sidedoor icon for Chats / Saved
-shortcuts.
+Long-press the Sidedoor icon for Chats and Saved shortcuts.
 
 ## Layout
 
-- `guard-core/` - all decisions, pure Kotlin with no Android APIs: screen
-  classifier, allowlist policy, correction ladder, dead-zone planner, Saved
-  trip, notification rules, Reel Inbox queue, window-stack safety, canary.
-  Tested against screen dumps in `src/test/resources/fixtures/` (personal text
-  replaced with `redacted`) plus hand-built snapshots.
-- `app/` - the accessibility service that reads the screen and carries out the
-  decisions, the overlays, the notification listener, and the Front Door UI.
-- `build-logic/` - Gradle convention plugins, including the no-network
-  permission audit.
-- `tools/` - adb install and device-check scripts.
+- `guard-core/` makes every decision, in pure Kotlin with no Android APIs: the screen classifier, allowlist policy,
+  correction ladder, dead-zone planner, Saved trip, notification rules, Reel Inbox queue, window-stack safety and
+  canary. Its tests run against screen dumps in `src/test/resources/fixtures/` and hand-built snapshots.
+- `app/` is the accessibility service that reads the screen and carries out those decisions, plus the overlays, the
+  notification listener and the Front Door UI.
+- `build-logic/` has the Gradle convention plugins, including the no-network permission audit.
+- `tools/` has the adb install and device-check scripts.
 
-`guard-core/.../classify/IgIds.kt` holds every Instagram view ID and label the
-guard depends on. When Instagram changes, that file and the fixtures change.
+`guard-core/.../classify/IgIds.kt` holds every Instagram view ID and label the guard depends on. When Instagram
+changes, that file and the fixtures change.
 
 ## Tech
 
-Kotlin, Jetpack Compose (Material 3), Android `AccessibilityService` and
-`NotificationListenerService`, Gradle Kotlin DSL with convention plugins,
-JUnit 4 and Truth for the tests. Minimum Android 8.0 (API 26).
+Kotlin, Jetpack Compose (Material 3), Android `AccessibilityService` and `NotificationListenerService`, Gradle Kotlin
+DSL with convention plugins, and JUnit 4 and Truth for the tests.
 
 ## Licence and credits
 
-MIT - see [LICENSE](LICENSE). The Gradle wrapper (`gradlew`, `gradlew.bat`,
-`gradle/wrapper/gradle-wrapper.jar`) is part of Gradle and is licensed under
-the Apache License 2.0.
+MIT, see [LICENSE](LICENSE). The Gradle wrapper (`gradlew`, `gradlew.bat`, `gradle/wrapper/gradle-wrapper.jar`) is
+part of Gradle and is licensed under the Apache License 2.0.
